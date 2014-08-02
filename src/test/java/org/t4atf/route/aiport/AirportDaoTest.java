@@ -1,61 +1,109 @@
 package org.t4atf.route.aiport;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.t4atf.route.MauserLabel.AIRPORT;
 
-import org.junit.Rule;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jmock.Expectations;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.t4atf.route.Neo4jTest;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.index.Index;
+import org.t4atf.route.MauserUnitTesting;
 import org.t4atf.route.excpetions.NodeAlreadyExistent;
 import org.t4atf.transaction.TransactionOperation;
-import org.t4atf.transaction.TransactionWrapper;
 
-public class AirportDaoTest extends Neo4jTest
+public class AirportDaoTest extends MauserUnitTesting
 {
-  @Rule public ExpectedException exception = ExpectedException.none();
-  
-  private TransactionOperation transactionOperation = new TransactionWrapper(database);
-  private final AirportDao dao = new AirportDao(transactionOperation);
+  private final TransactionOperation transactionOperation = context.mock(TransactionOperation.class);
+  private final Index<Node> index = context.mock(Index.class);
+  private AirportDao dao;
+  private String testAirportCode = "LIN";
+
+  @Before
+  public void init()
+  {
+    context.checking(new Expectations()
+    {
+      {
+        allowing(transactionOperation).createIndexFor(AIRPORT);
+        will(returnValue(index));
+      }
+    });
+    dao = new AirportDao(transactionOperation);
+  }
 
   @Test
   public void createABrandNewAirportNode()
   {
-    Airport airport = dao.create("LIN", "Linate");
-    
-    assertThat(airport.getId(), greaterThan(0L));
-  }
-  
-  @Test
-  public void newlyCreatedAirportIsAddedToIndex()
-  {
-    dao.create("MAD", "Barajas");
-    
-    exception.expect(NodeAlreadyExistent.class);
-    dao.create("MAD", "Barajas");
+    String airportName = "Linate";
+    final Map<String, Object> expectedProperties = buildExpectedProperties(testAirportCode, airportName);
+
+    context.checking(new Expectations()
+    {
+      {
+        oneOf(transactionOperation).checkIndex(index, "name", testAirportCode);
+        oneOf(transactionOperation).createIndexedNode(expectedProperties, index, AIRPORT);
+      }
+    });
+
+    Airport airport = dao.create(testAirportCode, airportName);
+
+    assertThat(airport, notNullValue());
   }
 
   @Test
   public void cannotCreateTwiceTheSameAirportNode()
   {
+    String airportName = "Linate";
+    context.checking(new Expectations()
+    {
+      {
+        oneOf(transactionOperation).checkIndex(index, "name", testAirportCode); will(throwException(new NodeAlreadyExistent("")));
+      }
+    });
     exception.expect(NodeAlreadyExistent.class);
-    dao.create("MXP", "Malpensa");
+    dao.create(testAirportCode, airportName);
   }
-  
+
   @Test
   public void airportFound()
   {
-    Airport airport = dao.findByCode("MXP");
-    
-    assertThat(airport.getId(), greaterThan(0L));
+    final Node found = context.mock(Node.class);
+    context.checking(new Expectations()
+    {
+      {
+        oneOf(transactionOperation).find(testAirportCode, index); will(returnValue(found));
+      }
+    });
+    Airport airport = dao.findByCode(testAirportCode);
+
+    assertThat(airport, equalTo(new Airport(found)));
   }
-  
+
   @Test
   public void airportNotFound()
   {
-    Airport airport = dao.findByCode("XXX");
-    
-    assertThat(airport.getId(), equalTo(0L));
+    context.checking(new Expectations()
+    {
+      {
+        oneOf(transactionOperation).find(testAirportCode, index); will(returnValue(null));
+      }
+    });
+    Airport airport = dao.findByCode(testAirportCode);
+
+    assertThat(airport.toString(), equalTo("Airport '" + testAirportCode + "' not in registry"));
+  }
+
+  private Map<String, Object> buildExpectedProperties(final String airportCode, String airportName)
+  {
+    final Map<String, Object> expectedProperties = new HashMap<>();
+    expectedProperties.put("name", airportCode);
+    expectedProperties.put("longName", airportName);
+    return expectedProperties;
   }
 }

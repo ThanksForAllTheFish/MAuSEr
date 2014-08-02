@@ -6,23 +6,35 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.test.TestGraphDatabaseFactory;
 
-public class Neo4jTest
+public class Neo4jTest extends MauserUnitTesting
 {
   protected static GraphDatabaseService database;
-
+  
   @BeforeClass
   public static void setup()
   {
     database = new TestGraphDatabaseFactory().newImpermanentDatabase();
     try (Transaction tx = database.beginTx())
     {
-      for(MauserLabel l : MauserLabel.values())
-        database.schema().constraintFor(l).assertPropertyIsUnique("name").create();
+      createUniqueIndexFor("name");
+
       tx.success();
     }
     initializeWithFakeData(database);
+  }
+
+  private static void createUniqueIndexFor(String indexName)
+  {
+    for (MauserLabel l : MauserLabel.values())
+    {
+      Schema schema = database.schema();
+      schema.constraintFor(l).assertPropertyIsUnique(indexName).create();
+      //IndexDefinition index = schema.indexFor(l).on(indexName).create();
+      //schema.awaitIndexOnline(index, 10, TimeUnit.SECONDS);
+    }
   }
 
   @AfterClass
