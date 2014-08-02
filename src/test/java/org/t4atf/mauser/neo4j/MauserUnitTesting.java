@@ -1,5 +1,8 @@
 package org.t4atf.mauser.neo4j;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jmock.Expectations;
 import org.jmock.integration.junit4.JUnitRuleMockery;
 import org.junit.Rule;
@@ -27,6 +30,14 @@ public abstract class MauserUnitTesting
       }
 
     });
+  }
+
+  protected Map<String, Object> buildExpectedProperties(final String name, String longName)
+  {
+    final Map<String, Object> expectedProperties = new HashMap<>();
+    expectedProperties.put("name", name);
+    expectedProperties.put("longName", longName);
+    return expectedProperties;
   }
 
   protected abstract Label getLocalizedLabel();

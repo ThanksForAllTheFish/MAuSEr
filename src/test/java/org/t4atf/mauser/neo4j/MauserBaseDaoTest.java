@@ -36,26 +36,25 @@ public class MauserBaseDaoTest extends MauserUnitTesting
   }
 
   @Test
-  public void createABrandNewAirportNode()
+  public void createABrandNewNode()
   {
-    final String airportName = "Linate";
+    final Map<String, Object> properties = buildExpectedProperties(testAirportCode, "Linate");
     context.checking(new Expectations()
     {
       {
         oneOf(transactionOperation).checkIndex(index, "name", testAirportCode);
-        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testAirportCode, airportName), index, AIRPORT);
+        oneOf(transactionOperation).createIndexedNode(properties, index, getLocalizedLabel());
       }
     });
 
-    Airport airport = dao.create(testAirportCode, airportName);
+    Airport airport = dao.create(properties);
 
     assertThat(airport, notNullValue());
   }
 
   @Test
-  public void cannotCreateTwiceTheSameAirportNode()
+  public void cannotCreateSameNodeTwice()
   {
-    String airportName = "Linate";
     context.checking(new Expectations()
     {
       {
@@ -63,11 +62,11 @@ public class MauserBaseDaoTest extends MauserUnitTesting
       }
     });
     exception.expect(NodeAlreadyExistent.class);
-    dao.create(testAirportCode, airportName);
+    dao.create(buildExpectedProperties(testAirportCode, "Linate"));
   }
 
   @Test
-  public void airportFound()
+  public void nodeFound()
   {
     final Node found = context.mock(Node.class);
     context.checking(new Expectations()
@@ -83,7 +82,7 @@ public class MauserBaseDaoTest extends MauserUnitTesting
   }
 
   @Test
-  public void airportNotFound()
+  public void nodeNotFound()
   {
     context.checking(new Expectations()
     {
@@ -94,13 +93,5 @@ public class MauserBaseDaoTest extends MauserUnitTesting
     MauserBaseEntity airport = dao.findByName(testAirportCode);
 
     assertThat(airport.toString(), equalTo("Airport '" + testAirportCode + "' not in registry"));
-  }
-
-  private Map<String, Object> buildExpectedProperties(final String airportCode, String airportName)
-  {
-    final Map<String, Object> expectedProperties = new HashMap<>();
-    expectedProperties.put("name", airportCode);
-    expectedProperties.put("longName", airportName);
-    return expectedProperties;
   }
 }

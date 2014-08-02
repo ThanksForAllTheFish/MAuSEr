@@ -1,6 +1,7 @@
 package org.t4atf.mauser.geography.aiport;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
 
@@ -47,14 +48,25 @@ public class AirportDaoTest extends MauserUnitTesting
   @Test
   public void createNonExistentAirport() throws Exception
   {
-    context.checking(new Expectations()
-    {
-      {
-        allowing(node).getId(); will(returnValue(1L));
-      }
-    });
     Airport airport = dao.createNonExistentEntity(testAirportCode);
     
     assertThat(airport.getId(), equalTo(0L));
+  }
+  
+  @Test
+  public void createABrandNewAirport()
+  {
+    final String airportName = "Linate";
+    context.checking(new Expectations()
+    {
+      {
+        oneOf(transactionOperation).checkIndex(index, "name", testAirportCode);
+        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testAirportCode, airportName), index, getLocalizedLabel());
+      }
+    });
+
+    Airport airport = dao.create(testAirportCode, airportName);
+
+    assertThat(airport, notNullValue());
   }
 }

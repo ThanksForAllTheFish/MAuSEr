@@ -1,6 +1,5 @@
 package org.t4atf.mauser.neo4j;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.Label;
@@ -21,17 +20,6 @@ public abstract class MauserBaseDao<TYPE extends MauserBaseEntity>
     this.index = operation.createIndexFor(label);
   }
 
-  public TYPE create(String code, String name)
-  {
-    Map<String, Object> properties = new HashMap<>();
-    properties.put("name", code);
-    properties.put("longName", name);
-    operation.checkIndex(index, "name", code);
-    Node node = operation.createIndexedNode(properties, index, label);
-    
-    return createEntity(node);
-  }
-  
   public TYPE findByName(String name)
   {
     Node node = operation.find(name, index);
@@ -39,6 +27,14 @@ public abstract class MauserBaseDao<TYPE extends MauserBaseEntity>
     return createEntity( node );
   }
 
-  protected abstract TYPE createNonExistentEntity(String code);
+  protected TYPE create(Map<String, Object> properties)
+  {
+    operation.checkIndex(index, "name", (String) properties.get("name"));
+    Node node = operation.createIndexedNode(properties, index, label);
+    
+    return createEntity(node);
+  }
+
+  protected abstract TYPE createNonExistentEntity(String name);
   protected abstract TYPE createEntity(Node node);
 }
