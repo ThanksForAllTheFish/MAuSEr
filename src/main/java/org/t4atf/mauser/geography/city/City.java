@@ -5,7 +5,7 @@ import org.t4atf.mauser.neo4j.MauserBaseEntity;
 
 public class City extends MauserBaseEntity
 {
-  City(Node node)
+  public City(Node node)
   {
     super(node);
   }

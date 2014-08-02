@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.jmock.Expectations;

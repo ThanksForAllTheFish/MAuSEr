@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.Node;
+import org.t4atf.mauser.geography.city.City;
 import org.t4atf.mauser.neo4j.MauserBaseDao;
 import org.t4atf.mauser.transaction.TransactionOperation;
 
@@ -22,6 +23,10 @@ public class AirportDao extends MauserBaseDao<Airport>
     properties.put("name", code);
     properties.put("longName", name);
     return create(properties);
+  }
+  
+  public void connect(Airport airport, City city) {
+    airport.placeIn(city, operation);
   }
 
   @Override

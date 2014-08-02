@@ -5,6 +5,8 @@ import java.util.Map;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
@@ -65,6 +67,17 @@ public class TransactionWrapper implements TransactionOperation
     {
       IndexHits<Node> potentialHists = index.get("name", name);
       return potentialHists.getSingle();
+    }
+  }
+
+  @Override
+  public Relationship createRelationshipBetween(Node start, Node end, RelationshipType type)
+  {
+    try (Transaction tx = database.beginTx())
+    {
+      Relationship relationship = start.createRelationshipTo(end, type);
+      tx.success();
+      return relationship;
     }
   }
 }

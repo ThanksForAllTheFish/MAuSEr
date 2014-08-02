@@ -4,10 +4,12 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.RelationshipType;
+import org.t4atf.mauser.transaction.TransactionOperation;
 
 public abstract class MauserBaseEntity
 {
-  protected final Node node;
+  private final Node node;
 
   protected MauserBaseEntity(Node node)
   {
@@ -35,5 +37,10 @@ public abstract class MauserBaseEntity
   public String toString()
   {
     return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+  }
+
+  protected void connectWith(MauserBaseEntity endNode, RelationshipType relationship, TransactionOperation operation)
+  {
+    operation.createRelationshipBetween(node, endNode.node, relationship);
   }
 }
