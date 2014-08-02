@@ -13,19 +13,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
-import org.t4atf.mauser.geography.aiport.Airport;
 import org.t4atf.mauser.neo4j.MauserUnitTesting;
 
 public class CityDaoTest extends MauserUnitTesting
 {
-  private CityDao dao;
+  private ConcreteCityDao dao;
   private String testCityName = "Milano";
   private Node node = context.mock(Node.class);
   
   @Before
   public void init() {
     super.init();
-    dao = new CityDao(transactionOperation);
+    dao = new ConcreteCityDao(transactionOperation);
   }
 
   @Test

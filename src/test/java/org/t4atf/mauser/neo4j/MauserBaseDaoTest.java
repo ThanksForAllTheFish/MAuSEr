@@ -14,7 +14,7 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
 import org.t4atf.mauser.geography.aiport.Airport;
-import org.t4atf.mauser.geography.aiport.AirportDao;
+import org.t4atf.mauser.geography.aiport.ConcreteAirportDao;
 
 public class MauserBaseDaoTest extends MauserUnitTesting
 {
@@ -25,7 +25,7 @@ public class MauserBaseDaoTest extends MauserUnitTesting
   public void init()
   {
     super.init();
-    dao = new AirportDao(transactionOperation);
+    dao = new ConcreteAirportDao(transactionOperation);
   }
   
   @Override

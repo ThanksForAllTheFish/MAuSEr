@@ -16,7 +16,7 @@ import org.t4atf.mauser.neo4j.MauserUnitTesting;
 
 public class AirportDaoTest extends MauserUnitTesting
 {
-  private AirportDao dao;
+  private ConcreteAirportDao dao;
   private String testAirportCode = "LIN";
   private Node node = context.mock(Node.class);
 
@@ -24,7 +24,7 @@ public class AirportDaoTest extends MauserUnitTesting
   public void init()
   {
     super.init();
-    dao = new AirportDao(transactionOperation);
+    dao = new ConcreteAirportDao(transactionOperation);
   }
   
   @Test
