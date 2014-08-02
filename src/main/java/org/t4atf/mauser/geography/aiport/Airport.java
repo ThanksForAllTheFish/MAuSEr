@@ -1,4 +1,4 @@
-package org.t4atf.route.aiport;
+package org.t4atf.mauser.geography.aiport;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;

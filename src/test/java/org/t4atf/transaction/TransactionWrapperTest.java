@@ -5,7 +5,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.t4atf.route.MauserLabel.AIRPORT;
+import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +17,10 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
-import org.t4atf.route.Neo4jTest;
-import org.t4atf.route.excpetions.NodeAlreadyExistent;
+import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
+import org.t4atf.mauser.neo4j.Neo4jTest;
+import org.t4atf.mauser.transaction.TransactionOperation;
+import org.t4atf.mauser.transaction.TransactionWrapper;
 
 public class TransactionWrapperTest extends Neo4jTest
 {

@@ -1,4 +1,4 @@
-package org.t4atf.route;
+package org.t4atf.mauser.neo4j;
 
 import org.neo4j.graphdb.RelationshipType;
 

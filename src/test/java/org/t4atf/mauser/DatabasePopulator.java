@@ -1,11 +1,11 @@
-package org.t4atf.route.fixtures;
+package org.t4atf.mauser;
 
-import static org.t4atf.route.MauserLabel.AIRLINE;
-import static org.t4atf.route.MauserLabel.AIRPORT;
-import static org.t4atf.route.MauserLabel.CITY;
-import static org.t4atf.route.MauserLabel.CONTINENT;
-import static org.t4atf.route.MauserLabel.COUNTRY;
-import static org.t4atf.route.MauserLabel.REGION;
+import static org.t4atf.mauser.neo4j.MauserLabel.AIRLINE;
+import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
+import static org.t4atf.mauser.neo4j.MauserLabel.CITY;
+import static org.t4atf.mauser.neo4j.MauserLabel.CONTINENT;
+import static org.t4atf.mauser.neo4j.MauserLabel.COUNTRY;
+import static org.t4atf.mauser.neo4j.MauserLabel.REGION;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,8 +15,8 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.ResourceIterator;
 import org.neo4j.graphdb.Transaction;
-import org.t4atf.route.MauserLabel;
-import org.t4atf.route.MauserRelations;
+import org.t4atf.mauser.neo4j.MauserLabel;
+import org.t4atf.mauser.neo4j.MauserRelations;
 
 public class DatabasePopulator
 {

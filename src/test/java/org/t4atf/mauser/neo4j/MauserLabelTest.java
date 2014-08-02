@@ -1,17 +1,18 @@
-package org.t4atf.route;
+package org.t4atf.mauser.neo4j;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.t4atf.route.MauserLabel.AIRPORT;
-import static org.t4atf.route.MauserLabel.allBut;
-import static org.t4atf.route.MauserLabel.values;
+import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
+import static org.t4atf.mauser.neo4j.MauserLabel.allBut;
+import static org.t4atf.mauser.neo4j.MauserLabel.values;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.t4atf.mauser.neo4j.MauserLabel;
 
 public class MauserLabelTest
 {

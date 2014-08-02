@@ -1,9 +1,9 @@
-package org.t4atf.route.aiport;
+package org.t4atf.mauser.geography.aiport;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
-import static org.t4atf.route.MauserLabel.AIRPORT;
+import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,43 +11,40 @@ import java.util.Map;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.index.Index;
-import org.t4atf.route.MauserUnitTesting;
-import org.t4atf.route.excpetions.NodeAlreadyExistent;
-import org.t4atf.transaction.TransactionOperation;
+import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
+import org.t4atf.mauser.geography.aiport.Airport;
+import org.t4atf.mauser.geography.aiport.AirportDao;
+import org.t4atf.mauser.neo4j.MauserUnitTesting;
 
 public class AirportDaoTest extends MauserUnitTesting
 {
-  private final TransactionOperation transactionOperation = context.mock(TransactionOperation.class);
-  private final Index<Node> index = context.mock(Index.class);
   private AirportDao dao;
   private String testAirportCode = "LIN";
 
   @Before
   public void init()
   {
-    context.checking(new Expectations()
-    {
-      {
-        allowing(transactionOperation).createIndexFor(AIRPORT);
-        will(returnValue(index));
-      }
-    });
+    super.init();
     dao = new AirportDao(transactionOperation);
+  }
+  
+  @Override
+  protected Label getLocalizedLabel()
+  {
+    return AIRPORT;
   }
 
   @Test
   public void createABrandNewAirportNode()
   {
-    String airportName = "Linate";
-    final Map<String, Object> expectedProperties = buildExpectedProperties(testAirportCode, airportName);
-
+    final String airportName = "Linate";
     context.checking(new Expectations()
     {
       {
         oneOf(transactionOperation).checkIndex(index, "name", testAirportCode);
-        oneOf(transactionOperation).createIndexedNode(expectedProperties, index, AIRPORT);
+        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testAirportCode, airportName), index, AIRPORT);
       }
     });
 

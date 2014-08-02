@@ -1,13 +1,15 @@
-package org.t4atf.route;
+package org.t4atf.mauser.neo4j;
 
-import static org.t4atf.route.fixtures.DatabasePopulator.initializeWithFakeData;
+import static org.t4atf.mauser.DatabasePopulator.initializeWithFakeData;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.test.TestGraphDatabaseFactory;
+import org.t4atf.mauser.neo4j.MauserLabel;
 
 public class Neo4jTest extends MauserUnitTesting
 {
@@ -41,5 +43,11 @@ public class Neo4jTest extends MauserUnitTesting
   public static void teardown()
   {
     database.shutdown();
+  }
+
+  @Override
+  protected final Label getLocalizedLabel()
+  {
+    throw new UnsupportedOperationException("Class extending Neo4jTest should be generics, not specific to a given Label");
   }
 }

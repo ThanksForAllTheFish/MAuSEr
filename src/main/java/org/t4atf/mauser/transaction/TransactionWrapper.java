@@ -1,4 +1,4 @@
-package org.t4atf.transaction;
+package org.t4atf.mauser.transaction;
 
 import java.util.Map;
 
@@ -8,7 +8,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
-import org.t4atf.route.excpetions.NodeAlreadyExistent;
+import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
 
 public class TransactionWrapper implements TransactionOperation
 {

@@ -1,13 +1,13 @@
-package org.t4atf.route.aiport;
+package org.t4atf.mauser.geography.aiport;
 
-import static org.t4atf.route.MauserLabel.AIRPORT;
+import static org.t4atf.mauser.neo4j.MauserLabel.AIRPORT;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.Index;
-import org.t4atf.transaction.TransactionOperation;
+import org.t4atf.mauser.transaction.TransactionOperation;
 
 public class AirportDao
 {

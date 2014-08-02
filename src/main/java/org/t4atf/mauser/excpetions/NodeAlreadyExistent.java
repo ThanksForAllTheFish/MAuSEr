@@ -1,4 +1,4 @@
-package org.t4atf.route.excpetions;
+package org.t4atf.mauser.excpetions;
 
 public class NodeAlreadyExistent extends RuntimeException
 {
