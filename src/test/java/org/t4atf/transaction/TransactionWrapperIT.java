@@ -27,7 +27,7 @@ import org.t4atf.mauser.neo4j.Neo4jTest;
 import org.t4atf.mauser.transaction.TransactionOperation;
 import org.t4atf.mauser.transaction.TransactionWrapper;
 
-public class TransactionWrapperTest extends Neo4jTest
+public class TransactionWrapperIT extends Neo4jTest
 {
   private final Label testLabel = AIRPORT;
   private final TransactionOperation operation = new TransactionWrapper(database);

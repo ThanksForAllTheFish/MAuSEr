@@ -4,6 +4,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 import static org.t4atf.mauser.neo4j.MauserLabel.CITY;
+import static org.t4atf.mauser.neo4j.MauserRelations.REGION;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
+import org.t4atf.mauser.geography.region.Region;
 import org.t4atf.mauser.neo4j.MauserUnitTesting;
 
 public class CityDaoTest extends MauserUnitTesting
@@ -28,7 +30,7 @@ public class CityDaoTest extends MauserUnitTesting
   }
 
   @Test
-  public void createAirport() throws Exception
+  public void createCity() throws Exception
   {
     context.checking(new Expectations()
     {
@@ -42,7 +44,7 @@ public class CityDaoTest extends MauserUnitTesting
   }
   
   @Test
-  public void createNonExistentAirport() throws Exception
+  public void createNonExistentCity() throws Exception
   {
     City city = dao.createNonExistentEntity(testCityName);
     
@@ -50,7 +52,7 @@ public class CityDaoTest extends MauserUnitTesting
   }
   
   @Test
-  public void createABrandNewAirport()
+  public void createABrandNewCity()
   {
     context.checking(new Expectations()
     {
@@ -63,6 +65,20 @@ public class CityDaoTest extends MauserUnitTesting
     City city = dao.create(testCityName);
 
     assertThat(city, notNullValue());
+  }
+  
+  @Test
+  public void placeCityInRegion() throws Exception
+  {
+    final Node city = context.mock(Node.class, "city");
+    final Node region = context.mock(Node.class, "region");
+    context.checking(new Expectations()
+    {
+      {
+        oneOf(transactionOperation).createRelationshipBetween(city, region, REGION);
+      }
+    });
+    dao.connect(new City(city), new Region(region));
   }
 
   private Map<String, Object> buildExpectedProperties(String testCityName)
@@ -77,5 +93,4 @@ public class CityDaoTest extends MauserUnitTesting
   {
     return CITY;
   }
-
 }

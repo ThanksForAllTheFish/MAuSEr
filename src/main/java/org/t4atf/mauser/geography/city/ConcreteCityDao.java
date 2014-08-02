@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.neo4j.graphdb.Node;
+import org.t4atf.mauser.geography.region.Region;
 import org.t4atf.mauser.neo4j.MauserBaseDao;
 import org.t4atf.mauser.transaction.TransactionOperation;
 
@@ -23,6 +24,11 @@ public class ConcreteCityDao extends MauserBaseDao<City> implements CityDao
     properties.put("name", cityName);
     return super.create(properties);
   }
+  
+  @Override
+  public void connect(City city, Region region) {
+    city.placeIn(region, operation);
+  }
 
   @Override
   protected City createNonExistentEntity(String name)
@@ -35,5 +41,4 @@ public class ConcreteCityDao extends MauserBaseDao<City> implements CityDao
   {
     return new City(node);
   }
-
 }
