@@ -33,6 +33,6 @@ public class NonExistentContinent extends Continent
   @Override
   public String toString()
   {
-    return "Region '" + name + "' not in registry";
+    return "Country '" + name + "' not in registry";
   }
 }
