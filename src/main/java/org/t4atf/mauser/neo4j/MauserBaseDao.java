@@ -19,7 +19,7 @@ public abstract class MauserBaseDao<TYPE extends MauserBaseEntity>
     this.label = label;
   }
 
-  public TYPE findByCode(String name)
+  public TYPE findOne(String name)
   {
     Node node = operation.findOne("name", label, name);
     if (null == node) return createNonExistentEntity(name);

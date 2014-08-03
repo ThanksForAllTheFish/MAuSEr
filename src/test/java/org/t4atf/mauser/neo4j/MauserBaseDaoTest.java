@@ -75,7 +75,7 @@ public class MauserBaseDaoTest extends MauserUnitTesting
         allowing(found).getId(); will(returnValue(1L));
       }
     });
-    Airport airport = dao.findByCode(testAirportCode);
+    Airport airport = dao.findOne(testAirportCode);
 
     assertThat(airport.getId(), equalTo(1L));
   }
@@ -89,7 +89,7 @@ public class MauserBaseDaoTest extends MauserUnitTesting
         oneOf(transactionOperation).findOne("name", getLocalizedLabel(), testAirportCode); will(returnValue(null));
       }
     });
-    MauserBaseEntity airport = dao.findByCode(testAirportCode);
+    MauserBaseEntity airport = dao.findOne(testAirportCode);
 
     assertThat(airport.toString(), equalTo("Airport '" + testAirportCode + "' not in registry"));
   }

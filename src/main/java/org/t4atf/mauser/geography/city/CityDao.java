@@ -6,7 +6,7 @@ public interface CityDao
 {
   public City create(String cityName);
 
-  public City findByCode(String name);
+  public City findOne(String name);
 
   public void connect(City city, Region region);
 }

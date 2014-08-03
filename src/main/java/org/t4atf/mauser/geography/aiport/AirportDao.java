@@ -8,5 +8,5 @@ public interface AirportDao
 
   public void connect(Airport airport, City city);
 
-  public Airport findByCode(String code);
+  public Airport findOne(String code);
 }

@@ -12,7 +12,7 @@ import org.t4atf.mauser.transaction.TransactionOperation;
 
 public class ConcreteCityDao extends MauserBaseDao<City> implements CityDao
 {
-  ConcreteCityDao(TransactionOperation transactionOperation)
+  public ConcreteCityDao(TransactionOperation transactionOperation)
   {
     super(transactionOperation, CITY);
   }

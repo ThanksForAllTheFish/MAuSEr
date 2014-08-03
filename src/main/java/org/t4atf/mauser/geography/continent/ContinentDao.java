@@ -4,5 +4,5 @@ public interface ContinentDao
 {
   public Continent create(String cityName);
 
-  public Continent findByCode(String name);
+  public Continent findOne(String name);
 }

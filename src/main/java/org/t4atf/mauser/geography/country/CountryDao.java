@@ -6,7 +6,7 @@ public interface CountryDao
 {
   public Country create(String cityName);
 
-  public Country findByCode(String name);
+  public Country findOne(String name);
 
   public void connect(Country country, Continent continent);
 }

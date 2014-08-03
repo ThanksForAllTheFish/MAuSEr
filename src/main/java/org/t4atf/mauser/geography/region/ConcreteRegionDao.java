@@ -12,7 +12,7 @@ import org.t4atf.mauser.transaction.TransactionOperation;
 
 public class ConcreteRegionDao extends MauserBaseDao<Region> implements RegionDao
 {
-  ConcreteRegionDao(TransactionOperation transactionOperation)
+  public ConcreteRegionDao(TransactionOperation transactionOperation)
   {
     super(transactionOperation, REGION);
   }

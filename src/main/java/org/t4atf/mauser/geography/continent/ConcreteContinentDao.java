@@ -11,7 +11,7 @@ import org.t4atf.mauser.transaction.TransactionOperation;
 
 public class ConcreteContinentDao extends MauserBaseDao<Continent> implements ContinentDao
 {
-  ConcreteContinentDao(TransactionOperation transactionOperation)
+  public ConcreteContinentDao(TransactionOperation transactionOperation)
   {
     super(transactionOperation, CONTINENT);
   }
