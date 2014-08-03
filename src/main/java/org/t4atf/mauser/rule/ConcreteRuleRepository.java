@@ -15,9 +15,6 @@ public class ConcreteRuleRepository implements RuleRepository
     this.airportDao = airportDao;
   }
 
-  /* (non-Javadoc)
-   * @see org.t4atf.mauser.rule.RuleRepository#findRulesOrderedByLength(java.lang.String, java.lang.String)
-   */
   @Override
   public Rules findRulesOrderedByLength(String departureAirportCode, String landingAirportCode)
   {

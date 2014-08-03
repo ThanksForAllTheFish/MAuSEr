@@ -1,6 +1,5 @@
 package org.t4atf.mauser.rule;
 
-
 public class Ruler
 {
   private final RuleRepository ruleRepository;

@@ -8,7 +8,7 @@ import org.neo4j.graphdb.Node;
 import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
 import org.t4atf.mauser.transaction.TransactionOperation;
 
-public abstract class MauserBaseDao<TYPE extends MauserBaseEntity>
+public abstract class MauserBaseDao<TYPE extends MauserBaseEntity> implements MauserDao<TYPE>
 {
   protected final TransactionOperation operation;
   private final Label label;
@@ -19,6 +19,7 @@ public abstract class MauserBaseDao<TYPE extends MauserBaseEntity>
     this.label = label;
   }
 
+  @Override
   public TYPE findOne(String name)
   {
     Node node = operation.findOne("name", label, name);

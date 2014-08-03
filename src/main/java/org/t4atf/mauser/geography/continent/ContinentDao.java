@@ -1,8 +1,8 @@
 package org.t4atf.mauser.geography.continent;
 
-public interface ContinentDao
+import org.t4atf.mauser.neo4j.MauserDao;
+
+public interface ContinentDao extends MauserDao<Continent>
 {
   public Continent create(String cityName);
-
-  public Continent findOne(String name);
 }
