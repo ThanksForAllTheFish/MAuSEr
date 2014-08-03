@@ -25,7 +25,6 @@ public class CityDaoTest extends MauserUnitTesting
   
   @Before
   public void init() {
-    super.init();
     dao = new ConcreteCityDao(transactionOperation);
   }
 
@@ -57,8 +56,7 @@ public class CityDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).checkIndex(index, "name", testCityName);
-        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testCityName), index, getLocalizedLabel());
+        oneOf(transactionOperation).createNode(buildExpectedProperties(testCityName), getLocalizedLabel());
       }
     });
 

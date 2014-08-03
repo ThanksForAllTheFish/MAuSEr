@@ -1,5 +1,8 @@
 package org.t4atf.mauser.transaction;
 
+import static org.apache.commons.collections4.IteratorUtils.toList;
+
+import java.util.List;
 import java.util.Map;
 
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -8,9 +11,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.index.Index;
-import org.neo4j.graphdb.index.IndexHits;
-import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
 
 public class TransactionWrapper implements TransactionOperation
 {
@@ -22,7 +22,7 @@ public class TransactionWrapper implements TransactionOperation
   }
 
   @Override
-  public Node createIndexedNode(Map<String, Object> properties, Index<Node> index, Label... labels)
+  public Node createNode(Map<String, Object> properties, Label... labels)
   {
     try (Transaction tx = database.beginTx())
     {
@@ -31,7 +31,6 @@ public class TransactionWrapper implements TransactionOperation
       {
         node.setProperty(k, properties.get(k));
       }
-      index.add(node, "name", properties.get("name"));
 
       tx.success();
       return node;
@@ -39,35 +38,20 @@ public class TransactionWrapper implements TransactionOperation
   }
 
   @Override
-  public Index<Node> createIndexFor(Label label)
+  public Node findOne(String indexKey, Label indexLabel, String indexValue)
   {
     try (Transaction tx = database.beginTx())
     {
-      return database.index().forNodes(label.name());
+      List<Node> nodes = findBy(indexKey, indexLabel, indexValue);
+      if(!nodes.isEmpty()) return nodes.get(0);
+      return null;
     }
   }
 
   @Override
-  public void checkIndex(Index<Node> index, String indexKey, String indexValue)
+  public List<Node> findBy(String searchKey, Label label, String searchValue)
   {
-    try (Transaction tx = database.beginTx())
-    {
-      IndexHits<Node> potentialIndexHits = index.get(indexKey, indexValue);
-      if (potentialIndexHits.hasNext())
-      {
-        throw new NodeAlreadyExistent("Cannot create node '" + indexValue + "'. It already exists as " + potentialIndexHits.getSingle());
-      }
-    }
-  }
-
-  @Override
-  public Node find(String name, Index<Node> index)
-  {
-    try (Transaction tx = database.beginTx())
-    {
-      IndexHits<Node> potentialHists = index.get("name", name);
-      return potentialHists.getSingle();
-    }
+    return toList(database.findNodesByLabelAndProperty(label, searchKey, searchValue).iterator());
   }
 
   @Override

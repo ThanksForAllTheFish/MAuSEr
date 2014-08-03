@@ -87,7 +87,6 @@ public class DatabasePopulator
     parameters.put( "name", name );
     ResourceIterator<Node> it = engine.execute( queryString, parameters ).columnAs( "n" );
     Node node = it.next();
-    database.index().forNodes(label.name()).add(node, "name", name);
     return node;
   }
 

@@ -23,7 +23,6 @@ public class AirportDaoTest extends MauserUnitTesting
   @Before
   public void init()
   {
-    super.init();
     dao = new ConcreteAirportDao(transactionOperation);
   }
   
@@ -56,8 +55,7 @@ public class AirportDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).checkIndex(index, "name", testAirportCode);
-        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testAirportCode, airportName), index, getLocalizedLabel());
+        oneOf(transactionOperation).createNode(buildExpectedProperties(testAirportCode, airportName), getLocalizedLabel());
       }
     });
 

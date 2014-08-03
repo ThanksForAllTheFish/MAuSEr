@@ -9,7 +9,6 @@ import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.schema.Schema;
 import org.neo4j.test.TestGraphDatabaseFactory;
-import org.t4atf.mauser.neo4j.MauserLabel;
 
 public class Neo4jTest extends MauserUnitTesting
 {
@@ -34,8 +33,8 @@ public class Neo4jTest extends MauserUnitTesting
     {
       Schema schema = database.schema();
       schema.constraintFor(l).assertPropertyIsUnique(indexName).create();
-      //IndexDefinition index = schema.indexFor(l).on(indexName).create();
-      //schema.awaitIndexOnline(index, 10, TimeUnit.SECONDS);
+//      IndexDefinition index = schema.indexFor(l).on(indexName).create();
+//      schema.awaitIndexOnline(index, 10, TimeUnit.SECONDS);
     }
   }
 

@@ -25,7 +25,6 @@ public class RegionRegionDaoTest extends MauserUnitTesting
   
   @Before
   public void init() {
-    super.init();
     dao = new ConcreteRegionDao(transactionOperation);
   }
 
@@ -57,8 +56,7 @@ public class RegionRegionDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).checkIndex(index, "name", testRegionName);
-        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testRegionName), index, getLocalizedLabel());
+        oneOf(transactionOperation).createNode(buildExpectedProperties(testRegionName), getLocalizedLabel());
       }
     });
 

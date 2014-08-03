@@ -18,20 +18,7 @@ public abstract class MauserUnitTesting
   @Rule public ExpectedException exception = ExpectedException.none();
   
   protected final TransactionOperation transactionOperation = context.mock(TransactionOperation.class);
-  protected final Index<Node> index = context.mock(Index.class);
   
-  public void init()
-  {
-    context.checking(new Expectations()
-    {
-      {
-        allowing(transactionOperation).createIndexFor(getLocalizedLabel());
-        will(returnValue(index));
-      }
-
-    });
-  }
-
   protected Map<String, Object> buildExpectedProperties(final String name, String longName)
   {
     final Map<String, Object> expectedProperties = new HashMap<>();

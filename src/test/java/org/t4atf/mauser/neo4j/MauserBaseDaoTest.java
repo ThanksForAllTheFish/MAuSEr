@@ -10,6 +10,7 @@ import java.util.Map;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
+import org.neo4j.graphdb.ConstraintViolationException;
 import org.neo4j.graphdb.Label;
 import org.neo4j.graphdb.Node;
 import org.t4atf.mauser.excpetions.NodeAlreadyExistent;
@@ -24,7 +25,6 @@ public class MauserBaseDaoTest extends MauserUnitTesting
   @Before
   public void init()
   {
-    super.init();
     dao = new ConcreteAirportDao(transactionOperation);
   }
   
@@ -41,8 +41,7 @@ public class MauserBaseDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).checkIndex(index, "name", testAirportCode);
-        oneOf(transactionOperation).createIndexedNode(properties, index, getLocalizedLabel());
+        oneOf(transactionOperation).createNode(properties, getLocalizedLabel());
       }
     });
 
@@ -54,14 +53,15 @@ public class MauserBaseDaoTest extends MauserUnitTesting
   @Test
   public void cannotCreateSameNodeTwice()
   {
+    final Map<String, Object> properties = buildExpectedProperties(testAirportCode, "Linate");
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).checkIndex(index, "name", testAirportCode); will(throwException(new NodeAlreadyExistent("")));
+        oneOf(transactionOperation).createNode(properties, getLocalizedLabel()); will(throwException(new ConstraintViolationException("")));
       }
     });
     exception.expect(NodeAlreadyExistent.class);
-    dao.create(buildExpectedProperties(testAirportCode, "Linate"));
+    dao.create(properties);
   }
 
   @Test
@@ -71,11 +71,11 @@ public class MauserBaseDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).find(testAirportCode, index); will(returnValue(found));
+        oneOf(transactionOperation).findOne("name", getLocalizedLabel(), testAirportCode); will(returnValue(found));
         allowing(found).getId(); will(returnValue(1L));
       }
     });
-    Airport airport = dao.findByName(testAirportCode);
+    Airport airport = dao.findByCode(testAirportCode);
 
     assertThat(airport.getId(), equalTo(1L));
   }
@@ -86,10 +86,10 @@ public class MauserBaseDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).find(testAirportCode, index); will(returnValue(null));
+        oneOf(transactionOperation).findOne("name", getLocalizedLabel(), testAirportCode); will(returnValue(null));
       }
     });
-    MauserBaseEntity airport = dao.findByName(testAirportCode);
+    MauserBaseEntity airport = dao.findByCode(testAirportCode);
 
     assertThat(airport.toString(), equalTo("Airport '" + testAirportCode + "' not in registry"));
   }

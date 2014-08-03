@@ -25,7 +25,6 @@ public class CountryDaoTest extends MauserUnitTesting
   
   @Before
   public void init() {
-    super.init();
     dao = new ConcreteCountryDao(transactionOperation);
   }
 
@@ -57,8 +56,7 @@ public class CountryDaoTest extends MauserUnitTesting
     context.checking(new Expectations()
     {
       {
-        oneOf(transactionOperation).checkIndex(index, "name", testCountryName);
-        oneOf(transactionOperation).createIndexedNode(buildExpectedProperties(testCountryName), index, getLocalizedLabel());
+        oneOf(transactionOperation).createNode(buildExpectedProperties(testCountryName), getLocalizedLabel());
       }
     });
 
