@@ -1,6 +1,7 @@
 package org.t4atf.mauser.neo4j;
 
-import static org.neo4j.graphdb.Direction.BOTH;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.traversal.Uniqueness.NODE_PATH;
 import static org.t4atf.mauser.neo4j.MauserRelations.CITY;
 import static org.t4atf.mauser.neo4j.MauserRelations.CONTINENT;
 import static org.t4atf.mauser.neo4j.MauserRelations.COUNTRY;
@@ -17,8 +18,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.t4atf.mauser.transaction.TransactionOperation;
 
 public abstract class MauserBaseEntity
@@ -63,13 +63,20 @@ public abstract class MauserBaseEntity
     GraphDatabaseService database = node.getGraphDatabase();
     try (Transaction tx = database.beginTx())
     {
-      Traverser traverse = database.traversalDescription().depthFirst()
-        .relationships(CITY, BOTH)
-        .relationships(CONTINENT, BOTH)
-        .relationships(COUNTRY, BOTH)
-        .relationships(REGION, BOTH)
-        .evaluator(Evaluators.includeWhereEndNodeIs(endNode.node)).traverse(node);
-      return IteratorUtils.toList(traverse.iterator());
+      TraversalDescription bothSide = database.traversalDescription().depthFirst()
+        .relationships(CITY, OUTGOING)
+        .relationships(REGION, OUTGOING)
+        .relationships(COUNTRY, OUTGOING)
+        .relationships(CONTINENT, OUTGOING)
+        .uniqueness(NODE_PATH);
+      
+      return IteratorUtils.toList(
+        database
+          .bidirectionalTraversalDescription()
+          .startSide(bothSide)
+          .endSide(bothSide)
+          .traverse(node, endNode.node)
+          .iterator());
     }
   }
 }
